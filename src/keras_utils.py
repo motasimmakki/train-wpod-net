@@ -25,23 +25,15 @@ def save_model(model,path,verbose=0):
     model.save_weights('%s.h5' % path)
     if verbose: print('Saved to %s' % path)
 
-def load_model(path, custom_objects={}, verbose=0):
+def load_model(path,custom_objects={},verbose=0):
     from keras.models import model_from_json
-    import tensorflow as tf
 
     path = splitext(path)[0]
-    with open('%s.json' % path, 'r') as json_file:
+    with open('%s.json' % path,'r') as json_file:
         model_json = json_file.read()
-
-    # Register 'Model' to tf.keras.Model to resolve the deserialization issue
-    custom_objects.update({'Model': tf.keras.Model})
-
     model = model_from_json(model_json, custom_objects=custom_objects)
     model.load_weights('%s.h5' % path)
-
-    if verbose:
-        print('Loaded from %s' % path)
-
+    if verbose: print('Loaded from %s' % path)
     return model
 
 
